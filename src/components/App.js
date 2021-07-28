@@ -7,23 +7,24 @@ const petUrl = "http://localhost:3001/pets"
 
 function App() {
   const [pets, setPets] = useState([]);
-  // const [filters, setFilters] = useState({ type: "all" });
-  const [filters, setFilters] = useState("all");
+  const [filters, setFilters] = useState({ type: "all" });
 
-  function handleChangePet(e){
-    setFilters(e.target.value)
+  function handleChangeType(type){
+    setFilters({type})
   }
 
-  console.log(filters)
-
-  useEffect(() => {
-    fetch(filters === "all" ? petUrl : petUrl + `?type=${filters}`)
+  function handleFindPetsClick(){
+    fetch(filters.type === "all" ? petUrl : petUrl + `?type=${filters.type}`)
     .then(res => res.json())
-    .then(pet => setPets(pet))
-  }, [filters])
+    .then(setPets)
+  }
 
-  if(pets === []){
-    return <h2>Loading...</h2>
+  function handleAdoptPet(id){
+    console.log("id: ", id)
+    const updatedPets = pets.map(pet => {
+      return pet.id === id ? {...pet, isAdopted: true} : pet
+    })
+    setPets(updatedPets)
   }
 
 
@@ -35,10 +36,13 @@ function App() {
       <div className="ui container">
         <div className="ui grid">
           <div className="four wide column">
-            <Filters onChangeType={handleChangePet}/>
+            <Filters 
+             onFindPetsClick={handleFindPetsClick}
+             onChangeType={handleChangeType}
+            />
           </div>
           <div className="twelve wide column">
-            <PetBrowser pets={pets}/>
+            <PetBrowser pets={pets} onAdoptPet={handleAdoptPet}/>
           </div>
         </div>
       </div>

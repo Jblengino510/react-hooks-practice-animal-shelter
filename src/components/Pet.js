@@ -1,18 +1,16 @@
 import React, { useState } from "react";
 
-function Pet({ name, gender, type, age, weight, isAdopted }) {
-  const [adoptPet, setAdoptPet] = useState(isAdopted)
-
-  function handleAdoptPet(){
-    setAdoptPet(!adoptPet)
-  }
+function Pet({ id, name, type, gender, age, weight, isAdopted, onAdoptPet }) {
+  
+function handleAdoptClick(){
+  onAdoptPet(id)
+}
 
 
   return (
     <div className="card">
       <div className="content">
         <span className="header">
-          {/*'♀' OR '♂' */}
           {gender === "male" ? '♂' : '♀'}
           {name}
         </span>
@@ -25,7 +23,7 @@ function Pet({ name, gender, type, age, weight, isAdopted }) {
         </div>
       </div>
       <div className="extra content">
-        {!adoptPet ? <button className="ui primary button" onClick={handleAdoptPet}>Adopt pet</button> : <button className="ui disabled button">Already adopted</button>}
+        {isAdopted ? <button className="ui disabled button">Already adopted</button> : <button className="ui primary button" onClick={handleAdoptClick}>Adopt pet</button>}
       </div>
     </div>
   );
